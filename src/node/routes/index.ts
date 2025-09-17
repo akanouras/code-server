@@ -22,6 +22,7 @@ import * as health from "./health"
 import * as login from "./login"
 import * as logout from "./logout"
 import * as pathProxy from "./pathProxy"
+import * as storage from "./storage"
 import * as update from "./update"
 import * as vscode from "./vscode"
 
@@ -148,6 +149,9 @@ export const register = async (app: App, args: DefaultedArgs): Promise<Disposabl
   app.router.use("/healthz", health.router)
   app.wsRouter.use("/healthz", health.wsRouter.router)
 
+  app.router.use("/storage", storage.router)
+  app.wsRouter.use("/storage", storage.wsRouter.router)
+
   if (args.auth === AuthType.Password) {
     app.router.use("/login", login.router)
     app.router.use("/logout", logout.router)
@@ -176,5 +180,6 @@ export const register = async (app: App, args: DefaultedArgs): Promise<Disposabl
   return () => {
     heart.dispose()
     vscode.dispose()
+    storage.dispose()
   }
 }
